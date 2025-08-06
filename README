@@ -1,0 +1,63 @@
+My OS Project
+
+AAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBOOOOOOOOOOOOOOOOOOOOOOOOOUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUTTTTTTTTTTTTTTTTT (sorry i tried my best to make a big "ABOUT ME")
+
+This is a OS I’m developing with as a base the episode 9 of the series "Build an OS from scratch" from Nanobyte , go check his content!
+My OS a small, lightweight kernel with basic functionalities like shell commands, keyboard input, file operations, user management (incomming), and more.
+I’m doing this to learn low-level programming, OS internals, and to have fun building something cool.
+Features
+
+    Simple shell with commands like help, echo, uptime, log, reboot, poweroff, cat, etc.
+
+    File system basics (touch, append, rm, ls)
+
+    Keyboard input handling (AZERTY layout)
+
+    Timer interrupts and system uptime
+
+How to build and run
+    Clone the repo
+
+    Build with make
+
+    ./run.sh
+    and if it doesn't work type chmod +x run.sh to give the run permission
+
+
+Usage
+
+    Type help in the shell to see all available commands.
+
+    Try commands like echo Hello, uptime, log, reboot, etc.
+
+ABOUT ME
+
+Hi, I’m Campbell,i'm french and a hobby OS developer and programmer passionate about low-level software and systems,
+before this project, i was coding module for the Linux Kernel (this is why the command are the same) and editing it , i love programming.
+This project is a playground to learn and experiment.
+Feel free to ask questions ,suggest improvements or signal bug! :)
+
+
+File nanobyte coded:
+build_scripts/*
+
+src/bootloader/*
+
+src/kernel/arch/*
+
+src/kernel/hal/*
+
+src/kernel/util/bynary.h
+
+src/kernel/ctype.c/.h
+
+src/kernel/memory.c/.h
+
+src/kernel/stdio.c/.h
+
+src/kernel/string.c/.h
+
+src/kernel/main.c (partially)
+
+
+A BIG thanks to Nanobyte for this amazing code ! [His Youtube channel](https://www.youtube.com/@nanobyte-dev)
