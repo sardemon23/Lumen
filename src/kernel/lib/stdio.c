@@ -494,3 +494,32 @@ void safe_printf(const char* fmt, ...) {
 }
 
 
+void dtoa(double num, char *str, int precision) {
+    if (precision < 0) precision = 0;
+
+    char *ptr = str;
+
+    // Signe
+    if (num < 0) {
+        *ptr++ = '-';
+        num = -num;
+    }
+
+    // Partie entière
+    long long int_part = (long long) num;
+    itoa(int_part, ptr, 10); // Appel avec base 10
+    while (*ptr) ptr++; // Avancer jusqu'à la fin de la chaîne
+
+    // Partie fractionnaire
+    if (precision > 0) {
+        *ptr++ = '.';
+        double frac_part = num - (double) int_part;
+        for (int i = 0; i < precision; i++) {
+            frac_part *= 10;
+            int digit = (int) frac_part;
+            *ptr++ = '0' + digit;
+            frac_part -= digit;
+        }
+        *ptr = '\0';
+    }
+}

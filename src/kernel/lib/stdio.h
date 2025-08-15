@@ -26,3 +26,4 @@ extern void redraw_input_line(void);
 // La fonction safe_printf complète
 void safe_printf(const char* fmt, ...) ;
 
+void dtoa(double num, char *str, int precision) ;

@@ -4,6 +4,7 @@
 #include "module/module.h"
 #include "lib/string.h"
 
+#define VERSION 1.1
 
 extern Module* module_head;
 

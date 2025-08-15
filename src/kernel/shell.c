@@ -275,7 +275,9 @@ void shell_process_command(char* command) {
         clrscr();
     }
     else if (STREQ(command, "version")) {
-        printf("This is version 1.0\n");
+        char buffer[64];
+        dtoa(VERSION, buffer, 1);
+        printf("Current Version: %s\n", buffer);
     }
     else {
         printf("Unknown command: %s\n", command);

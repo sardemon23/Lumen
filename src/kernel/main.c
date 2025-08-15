@@ -20,6 +20,9 @@ extern uint8_t __end;
 #define VGA_MEMORY ((volatile uint16_t*)0xB8000)
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
+
+
+
 void crash_me();
 // a timer for checking interrupts
 void timer(Registers* regs)
@@ -80,6 +83,8 @@ void print_lumen_splash() {
 
     
 }
+
+
 
 
 
