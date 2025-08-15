@@ -492,3 +492,5 @@ void safe_printf(const char* fmt, ...) {
     // Et on rafraîchit la ligne de saisie pour afficher le nouveau contenu
     redraw_input_line();
 }
+
+

@@ -1,16 +1,18 @@
 #include <stdint.h>
-#include <stdio.h>
 
+#include "module/module.h"
 #include "colors.h"
 #include "keyboard.h"
 #include "shell.h"
-#include "stdio.h"
-#include "memory.h"
+#include "lib/stdio.h"
+#include "memory/memory.h"
 #include "hal/hal.h"
 #include "arch/i686/irq.h"
-#include "timer.h"
+#include "sys.h"
+#include "user.h"
+#include "util/timer.h"
 #include "panic.h"
-
+#include "multitask/task.h"
 extern uint8_t __bss_start;
 extern uint8_t __end;
 
@@ -75,7 +77,7 @@ void print_lumen_splash() {
     "                                                    \n"
     );
     printf("Embrace Lumen, a little bit of light into the darkness of today's technologie\n");
-    // Remet la couleur par défaut (gris clair sur noir)
+
     
 }
 
@@ -83,7 +85,6 @@ void print_lumen_splash() {
 
 void __attribute__((section(".entry"))) start(uint16_t bootDrive)
 {
-    
     timer_initialize(100); //100Hz timer
     memset(&__bss_start, 0, (&__end) - (&__bss_start));
     //Turns on all the interrupt thing
@@ -91,13 +92,11 @@ void __attribute__((section(".entry"))) start(uint16_t bootDrive)
     i686_IRQ_RegisterHandler(0, timer);
 
     clrscr();
-    
+    init_users();
     print_lumen_splash();
     
     keyboard_initialize();
 
-    
-    
     //i686_IRQ_RegisterHandler(0, timer);
     uptime_seconds();
     shell_init();
@@ -106,6 +105,7 @@ void __attribute__((section(".entry"))) start(uint16_t bootDrive)
     // you know that i passed 1 hours figuring how to f*ck it kernel panic at start....
     // Turns out it was this crash_me() call (commented out now)
     //crash_me();
+    
 
 end:
     /*

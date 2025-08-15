@@ -129,12 +129,22 @@ void kfree(void* ptr) {
 
 }
 void print_heap_status() {
+    if (!free_list) {
+        printf("=== Heap Status ===\n");
+        printf("No bloc availaible.\n");
+        printf("===================\n");
+        return;
+    }
+
     mem_block_t* current = free_list;
     int i = 0;
 
     printf("=== Heap Status ===\n");
     while (current) {
-        printf("Bloc %d: %s, taille: %u octets\n", i, current->free ? "LIBRE" : "UTILISÉ", current->size);
+        printf("Bloc %d : %s, size : %zu octets\n", 
+               i, 
+               current->free ? "FREE" : "USED", 
+               current->size);
         current = current->next;
         i++;
     }

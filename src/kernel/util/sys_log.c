@@ -1,10 +1,10 @@
 // sys_log.c
 
 #include "sys_log.h"
-#include "../string.h"
-#include <stdio.h>
+#include "../lib/string.h"
+#include "../lib/stdio.h"
 #include "stddef.h"
-#include "../types.h"
+#include "types.h"
 
 
 static char log_buffer[LOG_BUFFER_SIZE];

@@ -1,15 +1,16 @@
 #include "keyboard.h"
 #include "arch/i686/pic.h"
 #include "shell.h"
-#include "stdio.h"
+#include "lib/stdio.h"
 #include "user.h"
 #include "arch/i686/io.h"
 #include "shell.h"
-#include "string.h"
-#include <stdio.h>
+#include "lib/string.h"
+
 //define some variable
 #define INPUT_BUFFER_SIZE 256
 
+//char input_buffer[INPUT_BUFFER_SIZE];
 char input_buffer[INPUT_BUFFER_SIZE];
 int input_index = 0;
 
@@ -20,7 +21,7 @@ void redraw_input_line() {
     if (current_user && current_user->username) {
         printf("%s> %s", current_user->username, input_buffer);
     } else {
-        printf("guest> %s", input_buffer);
+        printf("Unknown> %s", input_buffer);
     }
     printf(" ");
     printf("\r");
@@ -76,7 +77,7 @@ unsigned char scancode_to_ascii_azerty[256] = {
 
     [0x2B] = '*',
 
-    [0x2C] = 'w',   // Z key = w
+    [0x2C] = 'w',   
     [0x2D] = 'x',
     [0x2E] = 'c',
     [0x2F] = 'v',
@@ -116,9 +117,10 @@ void keyboard_handler(Registers* regs) {
 
     }
     if (scancode == 0x1C) {  // Enter
+
         if (input_index == 0)
             return;
-
+ 
         input_buffer[input_index] = '\0';
         printf("\n");
 
@@ -132,10 +134,67 @@ void keyboard_handler(Registers* regs) {
     }
 }
 
-
 void keyboard_initialize()
 {
     //listen to the keyboard
     i686_IRQ_RegisterHandler(1 , keyboard_handler);
     i686_PIC_Unmask(1);
+}
+void wait_for_key_release(uint8_t scancode) {
+    uint8_t sc;
+    do {
+        sc = i686_inb(0x60); // lire le port PS/2
+
+    } while (sc != (scancode | 0x80)); // attendre la version "release"
+}
+void redraw_input_line_kscanf(const char* buf) {
+    printf("\r");            // retour début de ligne
+
+    // effacer toute la ligne
+    for (int i = 0; i < 40; i++) { // 80 = largeur de ton écran
+        putc(' ');
+    }
+    printf("\r");            // retour début de ligne
+
+    
+    printf("> %s", buf);     
+}
+
+
+void get_string_scancode(char *buf, int max_len) {
+    int len = 0;
+    wait_for_key_release(0x1C);
+    while (1) {
+        uint8_t sc;
+        // Attendre une pression
+        do { sc = i686_inb(0x60); } while (sc >= 0x80);
+
+        if (sc == 0x1C) { // Enter
+            printf("\n");
+            buf[len] = '\0';
+            // attendre la release de Enter pour éviter relire
+            do { sc = i686_inb(0x60); } while (sc != (0x1C | 0x80));
+            return;
+        }
+
+        if (sc == 0x0E) { // backspace
+            if (len > 0) {
+                len--;
+                buf[len] = '\0';
+
+                redraw_input_line_kscanf(buf); // réaffiche la ligne avec le caractère effacé
+            }
+            continue;
+        }
+
+        char c = scancode_to_ascii_azerty[sc];
+        if (c && len < max_len - 1) {
+            buf[len++] = c;
+            buf[len] = '\0';
+            printf("%c", c);
+        }
+
+        // attendre la release du scancode avant de continuer
+        do { sc = i686_inb(0x60); } while (sc != (sc | 0x80));
+    }
 }

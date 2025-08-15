@@ -109,3 +109,39 @@ int atoi(const char* str) {
 
     return sign * result;
 }
+
+void itoa(int value, char* str, int base) {
+    char* ptr = str;
+    char* ptr1 = str;
+    char tmp_char;
+    int tmp_value;
+
+    if (value == 0) {
+        *ptr++ = '0';
+        *ptr = '\0';
+        return;
+    }
+
+    int is_negative = 0;
+    if (value < 0 && base == 10) {
+        is_negative = 1;
+        value = -value;
+    }
+
+    while (value != 0) {
+        tmp_value = value % base;
+        if (tmp_value < 10) *ptr++ = '0' + tmp_value;
+        else *ptr++ = 'A' + (tmp_value - 10);
+        value /= base;
+    }
+
+    if (is_negative) *ptr++ = '-';
+    *ptr-- = '\0';
+
+    // reverse string
+    while (ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr-- = *ptr1;
+        *ptr1++ = tmp_char;
+    }
+}
